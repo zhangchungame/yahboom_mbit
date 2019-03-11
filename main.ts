@@ -6,6 +6,63 @@ load dependency
 */
 
 
+// BH1750's I2C address
+enum BH1750_ADDRESS {
+    //% block="35"
+    A35,
+    //% block="92"
+    A92
+}
+
+let BH1750_zc_Address = 35
+
+/**
+ * BH1750 数字光强传感器软件包
+ */
+//% weight=100 color=#000011 icon="\uf185"
+namespace BH1750 {
+    /**
+     * 设置 BH1750 传感器的地址，默认是 35
+     * @param is I2C address, eg: 35
+     */
+    //% blockId="BH1750_SET_ADDRESS" block="设置地址 %addr"
+    //% weight=100 blockGap=8
+    export function SetAddress(addr: BH1750_ADDRESS): void {
+        if (addr == BH1750_ADDRESS.A35)
+            BH1750_zc_Address = 35
+        else
+            BH1750_zc_Address = 92
+    }
+
+    /**
+     * 打开 BH1750，开始转换光强。
+     */
+    //% blockId="BH1750_ON" block="打开传感器"
+    //% weight=90 blockGap=8
+    export function on(): void {
+        pins.i2cWriteNumber(BH1750_zc_Address, 0x10, NumberFormat.UInt8BE)
+    }
+
+    /**
+     * 关闭 BH1750，省电模式。
+     */
+    //% blockId="BH1750_OFF" block="关闭传感器"
+    //% weight=90 blockGap=8
+    export function off(): void {
+        pins.i2cWriteNumber(BH1750_zc_Address, 0, NumberFormat.UInt8BE)
+    }
+
+    /**
+     * 获取环境光强度 (lx)
+     */
+    //% blockId="BH1750_GET_INTENSITY" block="环境光强度 (lx)"
+    //% weight=80 blockGap=8
+    export function getIntensity(): number {
+        return Math.idiv(pins.i2cReadNumber(BH1750_zc_Address, NumberFormat.UInt16BE) * 5, 6)
+    }
+
+    on();
+}
 
 //% color="#C814B8" weight=25 icon="\uf1d4"
 namespace mbit_小车显示类 {
