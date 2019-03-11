@@ -8,7 +8,7 @@ load dependency
 
 
 //% color="#C814B8" weight=25 icon="\uf1d4"
-namespace mbit_显示类 {
+namespace mbit_显示类2 {
     
     export enum enColor {
 
